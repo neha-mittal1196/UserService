@@ -1,10 +1,10 @@
 package com.neha.UserService.controllers;
 
-
 import com.neha.UserService.dtos.LoginRequestDto;
 import com.neha.UserService.dtos.LogoutRequestDto;
 import com.neha.UserService.dtos.SignupRequestDto;
 import com.neha.UserService.dtos.UserDto;
+import com.neha.UserService.exceptions.UserNotFoundException;
 import com.neha.UserService.models.Token;
 import com.neha.UserService.models.User;
 import com.neha.UserService.services.UserService;
@@ -33,18 +33,20 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Token login(@RequestBody LoginRequestDto requestDto) {
-        return null;
+    public Token login(@RequestBody LoginRequestDto requestDto) throws UserNotFoundException {
+        return userService.login(requestDto.getEmail(), requestDto.getPassword());
     }
 
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(@RequestBody LogoutRequestDto requestDto) {
-        return null;
+        userService.logout(requestDto.getToken());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/validate/{token}")
     public UserDto validateToken(@PathVariable String token) {
-        return null;
+        User user = userService.validateToken(token);
+        return UserDto.from(user);
     }
 
     @GetMapping("/users/{id}")
