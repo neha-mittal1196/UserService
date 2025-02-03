@@ -49,8 +49,9 @@ public class UserController {
         return UserDto.from(user);
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     public UserDto getUserById(@PathVariable Long id) {
+        System.out.println("Got the request here in UserService");
         return null;
     }
 }
