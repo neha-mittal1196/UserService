@@ -5,9 +5,10 @@ import com.neha.UserService.dtos.LogoutRequestDto;
 import com.neha.UserService.dtos.SignupRequestDto;
 import com.neha.UserService.dtos.UserDto;
 import com.neha.UserService.exceptions.UserNotFoundException;
+import com.neha.UserService.exceptions.ValidTokenNotFoundException;
 import com.neha.UserService.models.Token;
 import com.neha.UserService.models.User;
-import com.neha.UserService.services.UserService;
+import com.neha.UserService.services.UserServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,15 +16,15 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private UserService userService;
+    private UserServiceImpl userServiceImpl;
 
-    UserController(UserService userService) {
-        this.userService = userService;
+    UserController(UserServiceImpl userServiceImpl) {
+        this.userServiceImpl = userServiceImpl;
     }
 
     @PostMapping("/signup")
     public UserDto signUp(@RequestBody SignupRequestDto requestDto) {
-        User user = userService.signUp(
+        User user = userServiceImpl.signUp(
                 requestDto.getEmail(),
                 requestDto.getName(),
                 requestDto.getPassword()
@@ -34,18 +35,18 @@ public class UserController {
 
     @PostMapping("/login")
     public Token login(@RequestBody LoginRequestDto requestDto) throws UserNotFoundException {
-        return userService.login(requestDto.getEmail(), requestDto.getPassword());
+        return userServiceImpl.login(requestDto.getEmail(), requestDto.getPassword());
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(@RequestBody LogoutRequestDto requestDto) {
-        userService.logout(requestDto.getToken());
+    public ResponseEntity<Void> logout(@RequestBody LogoutRequestDto requestDto) throws ValidTokenNotFoundException {
+        userServiceImpl.logout(requestDto.getToken());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/validate/{token}")
-    public UserDto validateToken(@PathVariable String token) {
-        User user = userService.validateToken(token);
+    public UserDto validateToken(@PathVariable String token) throws ValidTokenNotFoundException {
+        User user = userServiceImpl.validateToken(token);
         return UserDto.from(user);
     }
 

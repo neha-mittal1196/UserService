@@ -8,21 +8,21 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((requests) -> {
-                            try {
-                                requests
-                                        .anyRequest().permitAll();
-//                                        .and().cors(cors -> cors).disable()
-//                                        .csrf().disable();
-                            } catch (Exception e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
-                );
-
-        return http.build();
-    }
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http.csrf(AbstractHttpConfigurer::disable)
+//                .authorizeHttpRequests((requests) -> {
+//                            try {
+//                                requests
+//                                        .anyRequest().permitAll();
+////                                        .and().cors(cors -> cors).disable()
+////                                        .csrf().disable();
+//                            } catch (Exception e) {
+//                                throw new RuntimeException(e);
+//                            }
+//                        }
+//                );
+//
+//        return http.build();
+//    }
 }
